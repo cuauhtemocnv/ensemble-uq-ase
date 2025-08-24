@@ -22,11 +22,11 @@ it returns the mean energy of the ensemble, corrected with a bias term proportio
 `E_total = Ē + r * σ_E^2`
 where
 
-    $\bar{E}$ = mean energy across the ensemble
-    
-    $\sigma_E^2$ = variance of the energies
-    
-    $r$ = bias strength parameter (user-defined)
+$\bar{E}$ = mean energy across the ensemble
+
+$\sigma_E^2$ = variance of the energies
+
+$r$ = bias strength parameter (user-defined)
 - When you call:
 
 ```python
@@ -45,6 +45,7 @@ The total force is:
 $$
 \mathbf{F}_{\text{total}} = \bar{\mathbf{F}} + \mathbf{F}_{\text{bias}}
 $$
+
 where
 
     $E_i$ = energy predicted by potential $i$
