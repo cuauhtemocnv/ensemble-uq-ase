@@ -13,50 +13,32 @@ This repository corresponds to part of the work presented in:
 
 The `EnsembleCalculator` works as a drop-in ASE calculator that wraps multiple interatomic potentials (an **ensemble**).
 
-- When you call:
+- **Energy Calculation** (`atoms.get_potential_energy()`):
+  Returns the mean energy of the ensemble, corrected with a bias term proportional to the energy variance:
 
-```python
-atoms.get_potential_energy()
+  $$E_{\text{total}} = \bar{E} + r \cdot \sigma_E^2$$
+  
+  where:
+  - $\bar{E}$ = mean energy across the ensemble
+  - $\sigma_E^2$ = variance of the energies  
+  - $r$ = bias strength parameter (user-defined)
+
+- **Force Calculation** (`atoms.get_forces()`):
+  Returns the mean forces plus an additional bias force that points in the direction where the uncertainty is maximized:
+```math
+  \mathbf{F}_{\mathrm{bias}} = -r \sum_i (E_i - \bar{E}) (\mathbf{F}_i - \bar{\mathbf{F}})
 ```
-it returns the mean energy of the ensemble, corrected with a bias term proportional to the energy variance:
-`E_total = Ē + r * σ_E^2`
-where
-
-$\bar{E}$ = mean energy across the ensemble
-
-$\sigma_E^2$ = variance of the energies
-
-$r$ = bias strength parameter (user-defined)
-- When you call:
-
-```python
-atoms.get_forces()
+```math
+\mathbf{F}_{\mathrm{total}} = \bar{\mathbf{F}} + \mathbf{F}_{\mathrm{bias}}
 ```
-it returns the mean forces plus an additional bias force that points in the direction where the uncertainty is maximized.
 
-The bias force is calculated as:
+  where:
+  - $E_i$ = energy predicted by potential $i$
+  - $\mathbf{F}_i$ = forces predicted by potential $i$
+  - $\bar{E}$ = mean energy
+  - $\bar{\mathbf{F}}$ = mean force
 
-$$
-\mathbf{F}_{\text{bias}} = -r \sum_i \left(E_i - \bar{E}\right) \left(\mathbf{F}_i - \bar{\mathbf{F}}\right)
-$$
-
-The total force is:
-
-$$
-\mathbf{F}_{\text{total}} = \bar{\mathbf{F}} + \mathbf{F}_{\text{bias}}
-$$
-
-where
-
-    $E_i$ = energy predicted by potential $i$
-    
-    $\mathbf{F}_i$ = forces predicted by potential $i$
-    
-    $\bar{E}$ = mean energy
-    
-    $\bar{\mathbf{F}}$ = mean force
-    
-👉 This means the forces naturally push the atoms towards regions where the ensemble disagrees most, i.e. where the uncertainty is maximized.
+👉 This means the forces naturally push the atoms towards regions where the ensemble disagrees most, i.e., where the uncertainty is maximized.
 ---
 ## ✨ Features
 - Drop-in replacement for any ASE `Calculator`.
