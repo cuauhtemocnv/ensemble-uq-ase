@@ -9,7 +9,54 @@ This repository corresponds to part of the work presented in:
 > [https://doi.org/10.1039/D3NR05220F](https://doi.org/10.1039/D3NR05220F)
 
 ---
+## ⚙️ How It Works
 
+The `EnsembleCalculator` works as a drop-in ASE calculator that wraps multiple interatomic potentials (an **ensemble**).
+
+- When you call:
+
+```python
+atoms.get_potential_energy()
+```
+it returns the mean energy of the ensemble, corrected with a bias term proportional to the energy variance:
+`E_total = Ē + r * σ_E^2`
+where
+
+    $\bar{E}$ = mean energy across the ensemble
+    
+    $\sigma_E^2$ = variance of the energies
+    
+    $r$ = bias strength parameter (user-defined)
+- When you call:
+
+```python
+atoms.get_forces()
+```
+it returns the mean forces plus an additional bias force that points in the direction where the uncertainty is maximized.
+
+The bias force is calculated as:
+
+$$
+\mathbf{F}_{\text{bias}} = -r \sum_i \left(E_i - \bar{E}\right) \left(\mathbf{F}_i - \bar{\mathbf{F}}\right)
+$$
+
+The total force is:
+
+$$
+\mathbf{F}_{\text{total}} = \bar{\mathbf{F}} + \mathbf{F}_{\text{bias}}
+$$
+where
+
+    $E_i$ = energy predicted by potential $i$
+    
+    $\mathbf{F}_i$ = forces predicted by potential $i$
+    
+    $\bar{E}$ = mean energy
+    
+    $\bar{\mathbf{F}}$ = mean force
+    
+👉 This means the forces naturally push the atoms towards regions where the ensemble disagrees most, i.e. where the uncertainty is maximized.
+---
 ## ✨ Features
 - Drop-in replacement for any ASE `Calculator`.
 - Works with **multiple ML/DFT potentials**.
