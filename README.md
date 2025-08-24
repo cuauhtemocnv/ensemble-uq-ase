@@ -51,7 +51,7 @@ The `EnsembleCalculator` works as a drop-in ASE calculator that wraps multiple i
 ## 📦 Installation
 Clone the repository and install dependencies:
 ```bash
-git clone https://github.com/your-username/ensemble-uq-ase.git
+git clone https://github.com/cuauhtemocnv/ensemble-uq-ase.git
 cd ensemble-uq-ase
 pip install -e .
 ```
