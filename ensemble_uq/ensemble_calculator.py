@@ -44,8 +44,8 @@ class EnsembleCalculator(Calculator):
             energies, forces_list, mean_energy, mean_forces
         )
 
-        total_energy = -energy_bias
-        total_forces = 0.01*mean_forces + bias_forces
+        total_energy = 0.001*mean_energy-energy_bias
+        total_forces = 0.001*mean_forces + bias_forces
 
         self.results = {
             'energy': total_energy,
