@@ -16,7 +16,7 @@ The `EnsembleCalculator` works as a drop-in ASE calculator that wraps multiple i
 - **Energy Calculation** (`atoms.get_potential_energy()`):
   Returns the mean energy of the ensemble, corrected with a bias term proportional to the energy variance:
 
-  $$E_{\text{total}} = 0.001*\bar{E} + r \cdot \sigma_E^2/N$$
+  $$E_{\text{total}} = 0.001*\bar{E} - r \cdot \sigma_E^2/N$$
   
   where:
   - $\bar{E}$ = mean energy across the ensemble
