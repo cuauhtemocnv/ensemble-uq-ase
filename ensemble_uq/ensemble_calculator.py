@@ -35,15 +35,16 @@ class EnsembleCalculator(Calculator):
 
         mean_energy = np.mean(energies)
         mean_forces = np.mean(forces_list, axis=0)
-
+        na=len(atoms)
         energy_variance = self._calculate_energy_variance(energies, mean_energy)
-        energy_bias = self._calculate_energy_bias(energy_variance)
+        energy_bias = self._calculate_energy_bias(energy_variance)/na
 
+                     
         bias_forces = self._calculate_bias_forces(
             energies, forces_list, mean_energy, mean_forces
         )
 
-        total_energy = mean_energy + energy_bias
+        total_energy = -energy_bias
         total_forces = mean_forces + bias_forces
 
         self.results = {
