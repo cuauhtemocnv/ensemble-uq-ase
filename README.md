@@ -1,4 +1,4 @@
-# Ensemble-UQ-ASE 🚀
+# Ensemble-UQ-ASE 🚀 for Active Learning
 Uncertainty quantification for **interatomic potentials** using ensemble methods, built on top of [ASE (Atomic Simulation Environment)](https://wiki.fysik.dtu.dk/ase/).
 
 This repository corresponds to part of the work presented in:
