@@ -9,7 +9,7 @@ class EnsembleCalculator(Calculator):
 
     implemented_properties = ['energy', 'forces']
 
-    def __init__(self, calculators, bias_strength: float = 1.0, w_means: float=0.0 **kwargs):
+    def __init__(self, calculators, bias_strength: float = 1.0, w_means: float=0.0, **kwargs):
         """
         Initialize ensemble calculator.
 
