@@ -9,4 +9,4 @@ potentials within the ASE (Atomic Simulation Environment) framework.
 from .ensemble_calculator import EnsembleCalculator
 
 __all__ = ["EnsembleCalculator"]
-__version__ = "0.1.0"
+__version__ = "0.1.2"
