@@ -24,6 +24,7 @@ class EnsembleCalculator(Calculator):
         self.calculators = calculators
         self.M = len(calculators)
         self.bias_strength = bias_strength
+        self.w_means = w_means
         self.results = {}
 
     def calculate(self, atoms=None, properties=['energy', 'forces'],
