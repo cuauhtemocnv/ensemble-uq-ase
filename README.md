@@ -16,7 +16,7 @@ The `EnsembleCalculator` works as a drop-in ASE calculator that wraps multiple i
 - **Energy Calculation** (`atoms.get_potential_energy()`):
   Returns the mean energy of the ensemble, corrected with a bias term proportional to the energy variance:
 
-  $$E_{\text{total}} = 0.00*\bar{E} - r \cdot \sigma_E^2/N$$
+  $$E_{\text{total}} = w*\bar{E} - r \cdot \sigma_E^2/N$$
   
   where:
   - $\bar{E}$ = mean energy across the ensemble
@@ -30,7 +30,7 @@ The `EnsembleCalculator` works as a drop-in ASE calculator that wraps multiple i
   \mathbf{F}_{\mathrm{bias}} = -r \sum_i (E_i - \bar{E}) (\mathbf{F}_i - \bar{\mathbf{F}})
 ```
 ```math
-\mathbf{F}_{\mathrm{total}} = 0.001*\bar{\mathbf{F}} + \mathbf{F}_{\mathrm{bias}}
+\mathbf{F}_{\mathrm{total}} = w*\bar{\mathbf{F}} + \mathbf{F}_{\mathrm{bias}}
 ```
 
   where:
@@ -38,6 +38,7 @@ The `EnsembleCalculator` works as a drop-in ASE calculator that wraps multiple i
   - $\mathbf{F}_i$ = forces predicted by potential $i$
   - $\bar{E}$ = mean energy
   - $\bar{\mathbf{F}}$ = mean force
+  - $w$ = weight for potential energy contribution, default=0
 
 👉 This means the forces naturally push the atoms towards regions where the ensemble disagrees most, i.e., where the uncertainty is maximized.
 ---
