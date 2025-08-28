@@ -57,6 +57,11 @@ git clone https://github.com/cuauhtemocnv/ensemble-uq-ase.git
 cd ensemble-uq-ase
 pip install -e .
 ```
+Or just pip install
+```bash
+pip install git+https://github.com/cuauhtemocnv/ensemble-uq-ase.git
+```
+
 ## 🚀 Quick Start
 
 ```python
