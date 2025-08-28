@@ -82,7 +82,7 @@ calculators = [
     DummyPotential(0.1, 0.02),
     DummyPotential(-0.1, -0.01)
 ]
-ensemble_calc = EnsembleCalculator(calculators)
+ensemble_calc = EnsembleCalculator(calculators,w_means=0)
 
 # Simple H2O molecule
 atoms = Atoms("H2O", positions=[
