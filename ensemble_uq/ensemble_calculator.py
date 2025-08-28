@@ -9,7 +9,7 @@ class EnsembleCalculator(Calculator):
 
     implemented_properties = ['energy', 'forces']
 
-    def __init__(self, calculators, bias_strength: float = 1.0, **kwargs):
+    def __init__(self, calculators, bias_strength: float = 1.0, w_means: float=0.0 **kwargs):
         """
         Initialize ensemble calculator.
 
@@ -44,8 +44,8 @@ class EnsembleCalculator(Calculator):
             energies, forces_list, mean_energy, mean_forces
         )
 
-        total_energy = 0.00*mean_energy-energy_bias
-        total_forces = 0.001*mean_forces + bias_forces
+        total_energy = w_means*mean_energy-energy_bias
+        total_forces = w_means*mean_forces + bias_forces
 
         self.results = {
             'energy': total_energy,
