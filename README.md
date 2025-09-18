@@ -66,28 +66,57 @@ pip install git+https://github.com/cuauhtemocnv/ensemble-uq-ase.git
 
 ```python
 from ase import Atoms
+from ase.calculators.calculator import Calculator, all_changes
+import numpy as np
 from ensemble_uq import EnsembleCalculator
+class DummyCoulombCalculator(Calculator):
+    implemented_properties = ['energy', 'forces']
 
-# Define your calculators (replace DummyPotentials with actual ML/DFT calculators)
-class DummyPotential:
-    def __init__(self, energy_offset, force_offset):
-        self.energy_offset = energy_offset
-        self.force_offset = force_offset
+    def __init__(self, alpha=1.0, **kwargs):
+        super().__init__(**kwargs)
+        self.alpha = alpha
 
-    def get_potential_energy(self, atoms):
-        return len(atoms) * 1.0 + self.energy_offset
+    def get_potential_energy(self, atoms, force_consistent=True):
+        self.atoms = atoms
+        pos = atoms.get_positions()
+        numbers = atoms.get_atomic_numbers()
+        energy = 0.0
+        for i in range(len(atoms)):
+            for j in range(i+1, len(atoms)):
+                r_vec = pos[i] - pos[j]
+                r = np.linalg.norm(r_vec)
+                energy += self.alpha * numbers[i] * numbers[j] / r
+        return energy
 
     def get_forces(self, atoms):
-        import numpy as np
-        return np.random.normal(0, 0.1, (len(atoms), 3)) + self.force_offset
+        pos = atoms.get_positions()
+        numbers = atoms.get_atomic_numbers()
+        forces = np.zeros_like(pos)
+        for i in range(len(atoms)):
+            for j in range(i+1, len(atoms)):
+                r_vec = pos[i] - pos[j]
+                r = np.linalg.norm(r_vec)
+                f = self.alpha * numbers[i] * numbers[j] * r_vec / r**3
+                forces[i] += f
+                forces[j] -= f
+        return forces
 
+# Example molecule
+atoms = Atoms("H2O", positions=[
+    [0.0, 0.0, 0.0],
+    [0.95, 0.0, 0.0],
+    [0.95, 0.95, 0.0]
+])
+
+# Set calculator with alpha scaling
+atoms.calc = DummyCoulombCalculator(alpha=0.1)
 # Create an ensemble of dummy calculators
 calculators = [
-    DummyPotential(0.0, 0.01),
-    DummyPotential(0.1, 0.02),
-    DummyPotential(-0.1, -0.01)
+    DummyCoulombCalculator(0.01),
+    DummyCoulombCalculator(0.2),
+    DummyCoulombCalculator(0.3)
 ]
-ensemble_calc = EnsembleCalculator(calculators,w_means=0)
+ensemble_calc = EnsembleCalculator(calculators,w_means=0.0)
 
 # Simple H2O molecule
 atoms = Atoms("H2O", positions=[
@@ -97,7 +126,7 @@ atoms = Atoms("H2O", positions=[
 ])
 atoms.calc = ensemble_calc
 
-print("Energy:", atoms.get_potential_energy())
+print("Energy:", atoms.get_potential_energy
 print("Forces:", atoms.get_forces())
 print("Stats:", ensemble_calc.get_ensemble_statistics())
 ```
